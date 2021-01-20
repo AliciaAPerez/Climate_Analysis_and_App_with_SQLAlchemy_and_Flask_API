@@ -24,8 +24,8 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/20160822<br/>"
-        f"/api/v1.0/20160822/20170823<br/>"
+        f"/api/v1.0/start/<start_date><br/>"
+        f"/api/v1.0/start/<start_date>/end/<end_date><br/>"
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -36,49 +36,76 @@ def precipitation():
     """Return a list of all Precipitation data"""
     # Query precipitation
     results = session.query(Measurement.date, Measurement.prcp).order_by(Measurement.date).all()
-
+    #close session
     session.close()
-
-    # Convert list of tuples into normal list
+    # Convert list
     precip = list(np.ravel(results))
-
+    #jsonify
     return jsonify(precip)
 
 @app.route("/api/v1.0/stations")
 def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
-
-    """Return a list of all Precipitation data"""
-    # Query precipitation
+    """Return a list of all Station data"""
+    # Query stations
     results =  session.query(Station.id,Station.station, Station.name).all()
-
+    #close session
     session.close()
-
-    # Convert list of tuples into normal list
+    # Convert list
     station_list = list(np.ravel(results))
-
+    #jsonify
     return jsonify(station_list)
 
-app.route("/api/v1.0/tobs")
+@app.route("/api/v1.0/tobs")
 def tobs():
-    # Create our session (link) from Python to the DB
+    #creat session
     session = Session(engine)
-
-    """Return a list of all Precipitation data"""
-    # Query precipitation
-    sel = [Station.station, Station.name, Measurement.date, Measurement.tobs]
+    #variable for date
     start_date = dt.date(2017, 8, 23) - dt.timedelta(days=366)
-    results =  session.query(*sel).filter(Station.station == Measurement.station)\
-        .filter(Measurement.date>start_date).filter(Station.station == 'USC00519397').order_by(Measurement.date.desc()).all()
-
+    #data to pull
+    sel = [Station.station, Station.name, Measurement.date, Measurement.tobs]
+    """Return a list of all temperature data for the past year for station USC00519281"""
+    #query temperature date for last yera
+    results = session.query(*sel).filter(Station.station == Measurement.station)\
+        .filter(Measurement.date > start_date).filter(Station.station == 'USC00519281').order_by(Measurement.date).all()
+    #close session
     session.close()
-
-    # Convert list of tuples into normal list
+    #convert list
     last_year = list(np.ravel(results))
-
+    #josnify
     return jsonify(last_year)
 
 
+@app.route("/api/v1.0/start/<start>")
+def start(start):
+    #create session
+    session = Session(engine)
+    #variable for start date will be from user input on url
+    """Return a list of the Min, Max, and Avg Temperature for the start date and all greater dates"""
+    #query results for min, max, avg for start date
+    results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).all()
+    #close session
+    session.close()
+    #convert list
+    start_data = list(np.ravel(results))
+    #jsonify
+    return jsonify(start_data)
+
+@app.route("/api/v1.0/start/<starts>/end/<end>")
+def startend(starts,end):
+    #create session
+    session = Session(engine)
+    #variable for start date and end date will be from user input on url
+    """Return a list of the Min, Max, and Avg Temperature for between the two dates given"""
+    #query results for min,max, avg for the last year
+    results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= starts).filter(Measurement.date <= end).all()
+    #close session
+    session.close()
+    #convert list
+    end_data = list(np.ravel(results))
+    #jsonify
+    return jsonify(end_data)
+#run app
 if __name__ == "__main__":
     app.run(debug=True)
