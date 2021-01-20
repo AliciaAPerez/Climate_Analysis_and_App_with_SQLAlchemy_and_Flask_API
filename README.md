@@ -30,13 +30,12 @@ To run the climate analysis, you will need to open the file in Jupyter Notebook.
 The data is provided in the Resources folder. 
 
 ## Images
-There are 3 saved images from this data. The first is a bargraph detailing the precipition recorded over the last year of the data. The second are the frequency at which temperatures occur at the most 
+There are 2 saved images from this data. The first is a bargraph detailing the precipition recorded over the last year of the data provided from all of the stations. The second is a frequency histogram showing the frequency of temperatures at the station that had the most observations listed in the data. 
 
 Image 1:  City Latitude vs Max Temp from WeatherPy  
 ![image](Images/Precipitation.png)  
 Image 2:  City Latitude vs Humidity from WeatherPy  
-![image](Images/02_ScatterPlot.png)  
-Image 3:  City Latitude vs Cloudiness from WeatherPy  
-![image](Images/03_ScatterPlot.png)  
+![image](Images/Top_Station_Freq.png)  
 
 ## Overview
+The date provided is for 9 stations that include the temperature and precipitation recorded. All of the stations are in Hawaii. From the data we can extrapolate that station USC00519281 in Waihee, Hawaii has the most observations in the data provided. The last date recorded in the data set is 2017-08-23. The climate app shows the precipitation data for the last year, the station information, and the information for the station USC00519281 already filtered out. It also allows the user to provide a date, and it will find the min, max, and average for that date to the last date provided. In the Jupyter Notebook, we can see that for Station USC00519281, the temperature is most frequently around 75 degrees fahrenheit. 

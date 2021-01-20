@@ -32,10 +32,11 @@ def welcome():
 def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
-
-    """Return a list of all Precipitation data"""
+    #start date variable
+    start_date = dt.date(2017, 8, 23) - dt.timedelta(days=366)
+    """Return a list of all Precipitation data for the last year"""
     # Query precipitation
-    results = session.query(Measurement.date, Measurement.prcp).order_by(Measurement.date).all()
+    results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date > start_date).order_by(Measurement.date).all()
     #close session
     session.close()
     # Convert list
