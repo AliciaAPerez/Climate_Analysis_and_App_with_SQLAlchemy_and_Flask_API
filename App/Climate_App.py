@@ -83,9 +83,10 @@ def start(start):
     #create session
     session = Session(engine)
     #variable for start date will be from user input on url
+    start_date = start
     """Return a list of the Min, Max, and Avg Temperature for the start date and all greater dates"""
     #query results for min, max, avg for start date
-    results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).all()
+    results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start_date).all()
     #close session
     session.close()
     #convert list
@@ -93,14 +94,16 @@ def start(start):
     #jsonify
     return jsonify(start_data)
 
-@app.route("/api/v1.0/start/<starts>/end/<end>")
-def startend(starts,end):
+@app.route("/api/v1.0/start/<start>/end/<end>")
+def startend(start,end):
     #create session
     session = Session(engine)
     #variable for start date and end date will be from user input on url
+    start_date = start
+    end_date = end
     """Return a list of the Min, Max, and Avg Temperature for between the two dates given"""
     #query results for min,max, avg for the last year
-    results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= starts).filter(Measurement.date <= end).all()
+    results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
     #close session
     session.close()
     #convert list

@@ -32,9 +32,9 @@ The data is provided in the Resources folder.
 ## Images
 There are 2 saved images from this data. The first is a bar graph detailing the precipitation recorded over the last year of the data provided from all the stations. The second is a frequency histogram showing the frequency of temperatures at the station that had the most observations listed in the data. 
 
-Image 1:  Precipitation
+Image 1: Precipitation  
 ![image](Images/Precipitation.png)  
-Image 2:  Temperature Frequency
+Image 2: Temperature Frequency  
 ![image](Images/Top_Station_Freq.png)  
 
 ## Overview
